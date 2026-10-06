@@ -48,8 +48,8 @@ jobs:
           file "$SO"
           file "$SO" | grep -q 'ARM aarch64'
           test "$(readelf -h "$SO" | awk '/Machine:/{print $NF}')" = AArch64
-          # 依赖不得超出设备已有库集合
-          ALLOWED='libc\.so\.6|libstdc\+\+\.so\.6|libm\.so\.6|libgcc_s\.so\.1'
+          # 依赖不得超出设备已有库集合（ld-linux-aarch64.so.1 为设备自带动态加载器）
+          ALLOWED='libc\.so\.6|libstdc\+\+\.so\.6|libm\.so\.6|libgcc_s\.so\.1|ld-linux-aarch64\.so\.1'
           if readelf -d "$SO" | grep NEEDED | grep -vE "$ALLOWED"; then
             echo "::error::unexpected NEEDED libraries"; exit 1
           fi
