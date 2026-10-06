@@ -1,4 +1,5 @@
 #include "JSDeviceModule.hpp"
+#include <Exceptions/AssertFailed.hpp>
 #include <Exceptions/Exception.hpp>
 
 // ----------------------------------------------------------------------------

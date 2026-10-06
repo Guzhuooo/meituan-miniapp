@@ -1,5 +1,6 @@
 #include "DeviceModule.hpp"
 #include <cstddef>
+#include <cstdlib>
 #include <fstream>
 #include <sys/sysinfo.h>
 #include <sys/utsname.h>
