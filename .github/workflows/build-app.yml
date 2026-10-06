@@ -7,6 +7,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+
 jobs:
   native:
     uses: ./.github/workflows/build-native.yml
@@ -19,14 +22,16 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
 
       - name: Enable pnpm
         run: corepack enable pnpm
 
       - name: Install dependencies
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # PACKAGES_TOKEN = 有 read:packages 权限的 PAT（@penosext 私有包）；
+          # fork PR 无 secret 时回退到内置 GITHUB_TOKEN（可能无权拉包 -> 失败可见）
+          GITHUB_TOKEN: ${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
         run: pnpm install --frozen-lockfile
 
       - name: Test
@@ -46,11 +51,12 @@ jobs:
 
       - name: Package check + checksum
         run: |
-          AMR=$(find . -name '*.amr' | head -1)
-          test -n "$AMR" || { echo "no AMR produced"; exit 1; }
+          AMR=$(find . -maxdepth 1 -name '*.amr' | head -1)
+          test -n "$AMR" || { echo "::error::no AMR produced"; exit 1; }
           echo "AMR=$AMR" >> "$GITHUB_ENV"
           unzip -l "$AMR" | tee unpack.log
-          grep -q 'libs/libjsapi_mtdevice.so' unpack.log || { echo "native .so missing from AMR"; exit 1; }
+          grep -q 'libs/libjsapi_mtdevice.so' unpack.log || { echo "::error::native .so missing from AMR"; exit 1; }
+          grep -q 'manifest.json' unpack.log || { echo "::error::manifest missing"; exit 1; }
           sha256sum "$AMR" | tee amr.sha256
 
       - name: Upload AMR

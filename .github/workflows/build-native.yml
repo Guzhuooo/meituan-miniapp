@@ -24,31 +24,42 @@ jobs:
       - name: Install AArch64 cross toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends g++-12-aarch64-linux-gnu gcc-12-aarch64-linux-gnu binutils-aarch64-linux-gnu
+          sudo apt-get install -y --no-install-recommends binutils-aarch64-linux-gnu
+          if sudo apt-get install -y --no-install-recommends gcc-12-aarch64-linux-gnu g++-12-aarch64-linux-gnu; then
+            echo "CROSS_C_COMPILER=aarch64-linux-gnu-gcc-12" >> "$GITHUB_ENV"
+            echo "CROSS_CXX_COMPILER=aarch64-linux-gnu-g++-12" >> "$GITHUB_ENV"
+          else
+            sudo apt-get install -y --no-install-recommends gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+            echo "CROSS_C_COMPILER=aarch64-linux-gnu-gcc" >> "$GITHUB_ENV"
+            echo "CROSS_CXX_COMPILER=aarch64-linux-gnu-g++" >> "$GITHUB_ENV"
+          fi
 
       - name: Configure
         working-directory: native/mtdevice
-        env:
-          CROSS_C_COMPILER: aarch64-linux-gnu-gcc-12
-          CROSS_CXX_COMPILER: aarch64-linux-gnu-g++-12
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
         working-directory: native/mtdevice
         run: cmake --build build -j"$(nproc)"
 
-      - name: ELF checks (arch / interpreter / deps / export)
+      - name: ELF checks (arch / deps / export / GLIBCXX)
         run: |
           SO=native/mtdevice/build/libjsapi_mtdevice.so
-          file "$SO" | tee /dev/stderr | grep -q 'ARM aarch64'
+          file "$SO"
+          file "$SO" | grep -q 'ARM aarch64'
           test "$(readelf -h "$SO" | awk '/Machine:/{print $NF}')" = AArch64
-          # 共享库无 INTERP 段；依赖不得超出设备已有库集合
-          readelf -d "$SO" | tee /dev/stderr | grep NEEDED | grep -vE 'libc\.so\.6|libstdc\+\+\.so\.6|libm\.so\.6|libgcc_s\.so\.1' && exit 1 || true
+          # 依赖不得超出设备已有库集合
+          ALLOWED='libc\.so\.6|libstdc\+\+\.so\.6|libm\.so\.6|libgcc_s\.so\.1'
+          if readelf -d "$SO" | grep NEEDED | grep -vE "$ALLOWED"; then
+            echo "::error::unexpected NEEDED libraries"; exit 1
+          fi
           nm -D "$SO" | grep -q custom_init_jsapis
-          # GLIBCXX 符号版本上限 ≤ 3.4.29（设备 libstdc++ 6.0.29）
-          MAXGLB=$(strings "$SO" | grep -oE 'GLIBCXX_3\.4\.[0-9]+' | sort -uV | tail -1)
-          echo "max GLIBCXX = $MAXGLB"
-          [ "$(echo "$MAXGLB" | awk -F. '{print $3}')" -le 29 ] || { echo "GLIBCXX too new for device"; exit 1; }
+          # GLIBCXX 符号版本上限 <= 3.4.29（设备 libstdc++ 6.0.29）
+          MAXGLB=$(strings "$SO" | grep -oE 'GLIBCXX_3\.4\.[0-9]+' | sort -uV | tail -1 || true)
+          echo "max GLIBCXX = ${MAXGLB:-none}"
+          if [ -n "$MAXGLB" ] && [ "$(echo "$MAXGLB" | awk -F. '{print $3}')" -gt 29 ]; then
+            echo "::error::GLIBCXX too new for device"; exit 1
+          fi
 
       - name: Upload .so
         uses: actions/upload-artifact@v4
