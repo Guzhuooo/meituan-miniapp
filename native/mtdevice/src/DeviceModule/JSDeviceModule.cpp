@@ -86,8 +86,9 @@ void JSDeviceModule::readMemInfo(JQAsyncInfo &info)
             return;
         }
         info.post(Bson::object{
-            {"totalKb", static_cast<long long>(mem.totalKb)},
-            {"availableKb", static_cast<long long>(mem.availableKb)},
+            // Bson 无 long long 构造器；KB 值转为 double 无精度损失（< 2^53）
+            {"totalKb", static_cast<double>(mem.totalKb)},
+            {"availableKb", static_cast<double>(mem.availableKb)},
         });
     } catch (const std::exception &e) {
         info.postError(e.what());
