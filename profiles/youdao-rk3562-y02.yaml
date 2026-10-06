@@ -2,7 +2,7 @@
 # 探测日期: 2026-10-06 (只读 adb 探测, 证据见 profiles/evidence/)
 
 profile_id: youdao-rk3562-y02-497
-model: "Rockchip RK3562 Y02 LP4 V10 Board (Youdao Dictionary Pen, hostname YoudaoDictionaryPen-093, adb 伪装 Nexus 4/occam, serial MEA2400009000093)"
+model: "Rockchip RK3562 Y02 LP4 V10 Board (Youdao Dictionary Pen, hostname 已脱敏, adb 伪装 Nexus 4/occam, 序列号不入库)"
 firmware: "otaVersion 4.9.7, buildroot -g9a6d10c0cf (rk3562_y02_defconfig, built 2025-11-13)"
 
 runtime:
@@ -46,7 +46,7 @@ package:
 validation:
   tested_at: "2026-10-06"
   evidence:
-    - "adb devices -l → MEA2400009000093 device (product occam/Nexus_4 为伪装)"
+    - "adb devices -l → 一台设备在线 (product occam/Nexus_4 为伪装, 序列号已脱敏)"
     - "/etc/os-release → Buildroot 2021.11, RK3562-SDK rockchip_rk3562_y02_defconfig"
     - "/proc/version → aarch64-none-linux-gnu-gcc 10.3-2021.07"
     - "pull /bin/miniapp_cli → ELF64 aarch64, interp /lib/ld-linux-aarch64.so.1, NEEDED libstdc++.so.6"

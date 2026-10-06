@@ -2,12 +2,14 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-import { normalizeCategory, normalizeMerchant, type RawMerchant } from '../src/services/types';
+import { normalizeCategory, normalizeMerchant } from '../src/services/types.js';
 import {
   loadFeed,
   queryMerchants,
   resetFeedCache,
-} from '../src/services/merchantService';
+} from '../src/services/merchantService.js';
+
+type RawMerchant = import('../src/services/types.js').RawRecord;
 
 test('application entry declares the launch lifecycle', async () => {
   const source = await readFile(new URL('../src/app.js', import.meta.url), 'utf8');

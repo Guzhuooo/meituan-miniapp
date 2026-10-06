@@ -7,7 +7,7 @@
   </view>
 </template>
 
-<script lang="ts">
+<script>
 export default {
   props: {
     placeholder: { type: String, default: '搜索商家、商品' },

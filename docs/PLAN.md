@@ -26,10 +26,12 @@
 - `docs/STANDARDS.md`（vh/vw 标准、分层、native 三名一致、CI 门禁）。
 - 本文件。
 
-### Phase 3 — 工具链跑通 + vh/vw 探针 ⏳ 代码就绪，待执行
+### Phase 3 — 工具链跑通 + vh/vw 探针 ⏳ 本机链路全绿，待真机验证
 - [x] 探针页 `src/pages/probe/probe.vue`（四角/中心/scroller/触控映射）。
-- [ ] 本机 `pnpm install`（**需要用户提供 read:packages 的 GITHUB_TOKEN**）。
-- [ ] `pnpm test` / `typecheck` / `build` 全绿。
+- [x] `pnpm install` / `pnpm test`（7/7）/ `typecheck` / `pnpm build` 全绿；AMR 产物正常。
+- [x] 语言约束实测：SFC 与运行时模块必须纯 JS 可解析（STANDARDS §3.1），services 已改 JS+JSDoc。
+- [x] Windows 构建兼容补丁：`patches/`（falcon-module 绝对路径误判修复；pnpm patchedDependencies 自动应用）。
+- [x] 应用图标：黄色圆角 + 袋鼠 + 美团字样（MIT 素材合成，120×120）。
 - [ ] 模拟器 + 真机探针页验证，结论回写 profile（vh/vw 验收门）。
 
 ### Phase 4 — 美团 v0.1 ⏳ 代码就绪，待真机验收
@@ -52,8 +54,8 @@
 
 ## 待用户提供
 
-1. **GITHUB_TOKEN**（read:packages）— 本机 `pnpm install` 与 CI 拉取 `@penosext/*` 包都依赖它；CI 用内置 `secrets.GITHUB_TOKEN` 需在仓库 Settings → Actions 勾选允许访问私有包（或给仓库加一个 PAT secret）。
-2. **公开仓库地址** — 远端创建后 `git remote add origin <url> && git push`。
+1. ~~GITHUB_TOKEN~~ 已解决：gh CLI 登录（Guzhuooo），已 `gh auth refresh -s read:packages`；本机安装用 `GITHUB_TOKEN=$(gh auth token)`。
+2. **GitHub 连通性** — 本机 hosts 将 GitHub 域名指向 127.0.0.1（加速器工具未运行）：需开启加速器后 `gh repo create` + push。
 3. **appid** — 当前占位 `0000000000000000`（`package.json` 与 `miniapp.app.json` 两处需同步改）；确认平台分配规则后更新。
 
 ## 后续版本草案

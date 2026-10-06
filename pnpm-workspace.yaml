@@ -1,5 +1,10 @@
-minimumReleaseAge: 1440
-minimumReleaseAgeExclude:
-  - '@penosext/*'
 allowBuilds:
   esbuild: true
+
+minimumReleaseAge: 1440
+
+minimumReleaseAgeExclude:
+  - '@penosext/*'
+
+patchedDependencies:
+  '@penosext/miniapp-aiot-vue-cli@1.0.35': patches/@penosext__miniapp-aiot-vue-cli@1.0.35.patch

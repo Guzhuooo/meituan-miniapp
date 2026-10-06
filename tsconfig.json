@@ -6,7 +6,9 @@
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
+    "allowJs": true,
+    "checkJs": true,
     "types": ["@penosext/miniapp-types", "node"]
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"]
+  "include": ["src/**/*.js", "tests/**/*.ts"]
 }

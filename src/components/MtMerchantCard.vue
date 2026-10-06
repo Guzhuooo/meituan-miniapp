@@ -22,16 +22,14 @@
   </view>
 </template>
 
-<script lang="ts">
-import type { Merchant } from '../services/types';
-
+<script>
 export default {
   props: {
-    merchant: { type: Object as () => Merchant, required: true },
+    merchant: { type: Object, required: true },
   },
   emits: ['tap'],
   computed: {
-    shownTags(): string[] {
+    shownTags() {
       return this.merchant.tags.slice(0, 3);
     },
   },

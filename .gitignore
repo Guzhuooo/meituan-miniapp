@@ -2,6 +2,8 @@
 node_modules/
 dist/
 .falcon_/
+.miniapp/
+generated/
 *.amr
 *.log
 

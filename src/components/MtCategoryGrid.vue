@@ -7,7 +7,10 @@
       :class="cat.id === selectedId ? 'category-cell-selected' : 'category-cell-normal'"
       @click="onSelect(cat.id)"
     >
-      <view class="category-icon-box">
+      <view
+        class="category-icon-box"
+        :class="cat.id === selectedId ? 'category-icon-box-selected' : 'category-icon-box-normal'"
+      >
         <text class="category-icon-text">{{ cat.name.slice(0, 1) }}</text>
       </view>
       <text class="category-name">{{ cat.name }}</text>
@@ -15,17 +18,15 @@
   </view>
 </template>
 
-<script lang="ts">
-import type { Category } from '../services/types';
-
+<script>
 export default {
   props: {
-    categories: { type: Array as () => Category[], default: () => [] },
+    categories: { type: Array, default: () => [] },
     selectedId: { type: String, default: '' },
   },
   emits: ['select'],
   methods: {
-    onSelect(id: string) {
+    onSelect(id) {
       this.$emit('select', id);
     },
   },
@@ -59,10 +60,12 @@ export default {
   height: 9vh;
   align-items: center;
   justify-content: center;
-  background-color: #fff3cc;
   border-radius: 4.5vh;
 }
-.category-cell-selected .category-icon-box {
+.category-icon-box-normal {
+  background-color: #fff3cc;
+}
+.category-icon-box-selected {
   background-color: #ffd100;
 }
 .category-icon-text {

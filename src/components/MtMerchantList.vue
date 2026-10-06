@@ -4,7 +4,7 @@
       v-for="m in visibleMerchants"
       :key="m.id"
       :merchant="m"
-      @tap="(id: string) => $emit('tap', id)"
+      @tap="(id) => $emit('tap', id)"
     />
     <view v-if="hasMore" class="list-more-box" @click="loadMore">
       <text class="list-more-text">加载更多</text>
@@ -18,16 +18,15 @@
   </view>
 </template>
 
-<script lang="ts">
+<script>
 import MtMerchantCard from './MtMerchantCard.vue';
-import type { Merchant } from '../services/types';
 
 const BATCH_SIZE = 4;
 
 export default {
   components: { MtMerchantCard },
   props: {
-    merchants: { type: Array as () => Merchant[], default: () => [] },
+    merchants: { type: Array, default: () => [] },
   },
   emits: ['tap'],
   data() {
@@ -36,10 +35,10 @@ export default {
     };
   },
   computed: {
-    visibleMerchants(): Merchant[] {
+    visibleMerchants() {
       return this.merchants.slice(0, this.limit);
     },
-    hasMore(): boolean {
+    hasMore() {
       return this.merchants.length > this.limit;
     },
   },

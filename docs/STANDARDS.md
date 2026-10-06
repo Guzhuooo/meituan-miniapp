@@ -23,6 +23,21 @@
 - 只用单 class 选择器；多值圆角简写拆成单角属性；显式写 `flex-direction`。
 - 长列表分批渲染（`MtMerchantList` 的 BATCH_SIZE 模式），不做一次性大 v-for。
 
+### 3.1 语言约束（实测平台事实，2026-10-06）
+
+aiot-vue-cli 的 rollup 管线中，`@rollup/plugin-typescript` 的 TS 转换依赖 TS watch program 的异步 emit，与模块 `load` 存在竞态，在 Windows 上稳定失败（raw TS 源码被当 JS 解析）。实测证据：
+
+- SFC `<script lang="ts">` 内的 TS 语法（`import type`、类型注解）→ 构建直接 parse error；
+- 被页面导入的 `.ts` 文件（`import type` 语法）→ 同样 parse error（3/3 复现，含最小复现）。
+
+**规则**：进入 rollup bundle 的源码一律写成**可被纯 JS 解析**的形式：
+
+- SFC `<script>` 块：纯 JS（无 `lang="ts"`、无类型注解）；
+- `src/**` 运行时模块：`.js` + JSDoc 类型（`tsconfig` 已开 `allowJs` + `checkJs`，strict 依然生效）；
+- `.ts` 仅允许出现在 `tests/`（由 tsx 运行，不进 bundle）与不参与构建的类型文件中。
+
+违反后果：AMR 构建失败或产物含未转换语法。新增依赖文件前先跑 `pnpm build` 验证。
+
 ## 4. 分层标准
 
 ```text

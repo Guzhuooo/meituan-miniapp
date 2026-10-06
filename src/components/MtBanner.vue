@@ -7,7 +7,7 @@
   </view>
 </template>
 
-<script lang="ts">
+<script>
 /** 轮播：受控单帧展示，由父级定时切换 index（timer 统一在页面层管理清理） */
 export default {
   props: {
@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     // 供父组件 v-for :key 使用
-    keyOf(): string {
+    keyOf() {
       return this.item.title;
     },
   },

@@ -8,28 +8,27 @@
   </view>
 </template>
 
-<script lang="ts">
-import MtCategoryGrid from '../components/MtCategoryGrid.vue';
-import MtMerchantList from '../components/MtMerchantList.vue';
-import { loadFeed, queryMerchants } from '../services/merchantService';
-import type { Category, Merchant } from '../services/types';
+<script>
+import MtCategoryGrid from '../../components/MtCategoryGrid.vue';
+import MtMerchantList from '../../components/MtMerchantList.vue';
+import { loadFeed, queryMerchants } from '../../services/merchantService';
 
 export default {
   components: { MtCategoryGrid, MtMerchantList },
   data() {
     return {
-      categories: [] as Category[],
-      merchants: [] as Merchant[],
+      categories: [],
+      merchants: [],
       selectedCategoryId: '',
       loadGeneration: 0,
     };
   },
   computed: {
-    currentCategoryName(): string {
+    currentCategoryName() {
       const cat = this.categories.find((c) => c.id === this.selectedCategoryId);
       return cat ? cat.name : '全部分类';
     },
-    filteredMerchants(): Merchant[] {
+    filteredMerchants() {
       if (!this.selectedCategoryId) return this.merchants;
       return this.merchants.filter((m) => m.categoryId === this.selectedCategoryId);
     },
@@ -54,10 +53,10 @@ export default {
         console.error('loadFeed failed', e);
       }
     },
-    onSelectCategory(id: string) {
+    onSelectCategory(id) {
       this.selectedCategoryId = this.selectedCategoryId === id ? '' : id;
     },
-    onMerchantTap(_id: string) {
+    onMerchantTap(_id) {
       // v0.2: 跳转商家详情页
     },
   },

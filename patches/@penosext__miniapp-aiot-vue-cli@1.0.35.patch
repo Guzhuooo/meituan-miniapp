@@ -1,0 +1,16 @@
+diff --git a/dist/rollup-plugins/falcon-module.js b/dist/rollup-plugins/falcon-module.js
+index 3eed3c8b2976bb76adb47b91a205d655439b9f89..fe8ee07db46d8ff131444251f3db5050ef57883f 100644
+--- a/dist/rollup-plugins/falcon-module.js
++++ b/dist/rollup-plugins/falcon-module.js
+@@ -31,7 +31,10 @@ function falconModule() {
+                 return null;
+             if (JSAPI_RE.test(id))
+                 return id;
+-            if (id.startsWith('.') || id.startsWith('/'))
++            // Windows 绝对路径（如 F:\repo\src\...）不是裸模块名，交给 rollup 默认解析。
++            // 原实现只跳过 '.' 和 '/' 开头的 id，导致 Windows 下已解析文件被误判为
++            // 外部模块并在 buildEnd 报 "modules are not found"。
++            if (id.startsWith('.') || id.startsWith('/') || /^[A-Za-z]:[\\/]/.test(id))
+                 return null;
+             const appOptions = appInfo.getAppJsonInfo().options;
+             if (appOptions?.bundleFramework === true && (id === 'vue' || id.startsWith('@vue/')))

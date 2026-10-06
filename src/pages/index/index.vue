@@ -10,13 +10,12 @@
   </view>
 </template>
 
-<script lang="ts">
-import MtSearchBar from '../components/MtSearchBar.vue';
-import MtBanner from '../components/MtBanner.vue';
-import MtCategoryGrid from '../components/MtCategoryGrid.vue';
-import MtMerchantList from '../components/MtMerchantList.vue';
-import { loadFeed, queryMerchants } from '../services/merchantService';
-import type { Category, Merchant } from '../services/types';
+<script>
+import MtSearchBar from '../../components/MtSearchBar.vue';
+import MtBanner from '../../components/MtBanner.vue';
+import MtCategoryGrid from '../../components/MtCategoryGrid.vue';
+import MtMerchantList from '../../components/MtMerchantList.vue';
+import { loadFeed, queryMerchants } from '../../services/merchantService';
 
 const BANNERS = [
   { title: '今天想吃点什么？', subtitle: '附近优惠商家随时送' },
@@ -30,8 +29,8 @@ export default {
   components: { MtSearchBar, MtBanner, MtCategoryGrid, MtMerchantList },
   data() {
     return {
-      categories: [] as Category[],
-      merchants: [] as Merchant[],
+      categories: [],
+      merchants: [],
       selectedCategoryId: '',
       keyword: '',
       bannerIndex: 0,
@@ -41,10 +40,10 @@ export default {
     };
   },
   computed: {
-    currentBanner(): { title: string; subtitle: string } {
+    currentBanner() {
       return BANNERS[this.bannerIndex % BANNERS.length];
     },
-    filteredMerchants(): Merchant[] {
+    filteredMerchants() {
       // 已在服务层过滤；此处仅按分类再次本地过滤避免额外异步
       if (!this.selectedCategoryId) return this.merchants;
       return this.merchants.filter((m) => m.categoryId === this.selectedCategoryId);
@@ -89,14 +88,14 @@ export default {
       clearInterval(this.bannerTimer);
       this.bannerTimer = 0;
     },
-    onSelectCategory(id: string) {
+    onSelectCategory(id) {
       this.selectedCategoryId = this.selectedCategoryId === id ? '' : id;
     },
     onSearchTap() {
       // v0.1: 搜索框入口占位；v0.2 接系统输入法会话
       this.keyword = '';
     },
-    onMerchantTap(_id: string) {
+    onMerchantTap(_id) {
       // v0.2: 跳转商家详情页
     },
   },

@@ -29,3 +29,14 @@ adb shell miniapp_cli start 0000000000000000 --index
 - [项目标准](docs/STANDARDS.md)
 - [总计划与进度](docs/PLAN.md)
 - [设备 profile](profiles/youdao-rk3562-y02.yaml)
+
+## 平台兼容补丁
+
+`patches/@penosext__miniapp-aiot-vue-cli@1.0.35.patch` 修复构建器在 Windows 下
+把绝对路径（`F:\...`）误判为裸模块导致 `modules are not found` 的问题；
+经 `pnpm-workspace.yaml` 的 `patchedDependencies` 在 `pnpm install` 时自动应用。
+上游合并后可移除。
+
+## 素材来源
+
+- 应用图标：由 MIT 协议的 emoji-datasource-google（袋鼠）与系统字体合成，见 `docs/STANDARDS.md` 交付检查。

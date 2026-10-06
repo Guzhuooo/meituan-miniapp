@@ -7,6 +7,7 @@
   "contract": "@penosext/miniapp-http",
   "nativePackages": [
     "@penosext/miniapp-runtime",
+    "@penosext/miniapp-ai",
     "@penosext/miniapp-http",
     "@penosext/miniapp-sqlite",
     "@penosext/miniapp-input"
