@@ -38,6 +38,16 @@ aiot-vue-cli 的 rollup 管线中，`@rollup/plugin-typescript` 的 TS 转换依
 
 违反后果：AMR 构建失败或产物含未转换语法。新增依赖文件前先跑 `pnpm build` 验证。
 
+### 3.2 真机运行时契约（2026-10-06 实测，证据见 profiles/）
+
+以下为真机复现过的硬约束，违反会导致黑屏或功能静默失效：
+
+1. **App 入口必须是 class**：`class App extends $falcon.App` + `export default App`。导出普通对象会在真机 `launchApp` 报 `TypeError: not a constructor` 并黑屏。`onLaunch` 中必须 `super.onLaunch(options)` 并调用 `$falcon.useDefaultBasePageClass(BasePage)`。
+2. **页面生命周期钩子必须定义在 Vue 组件的 `methods` 里**（`onShow`/`onHide`/`onUnload`）。设备默认页基类通过 `this.$root.onShow()` 转发，写在顶层选项不会被执行（表现为数据不加载、timer 不启动）。
+3. **启动命令**：`miniapp_cli start {appId} {page}`，page 是**位置参数**；传 `--probe` 会被当作字面文件名（找 `--probe.js`）而失败。省略 page 只创建进程不挂页面。
+4. **vh/vw 直接生效**：1vh=0.01×屏高（280px 屏 → 2.8px）、1vw=0.01×屏宽（936px 屏 → 9.36px），无需 `setViewPort`。
+5. 证据文件命名：`profiles/evidence/<日期>-<场景>.png`，与 profile.yaml 的 validation.evidence 条目互指。
+
 ## 4. 分层标准
 
 ```text

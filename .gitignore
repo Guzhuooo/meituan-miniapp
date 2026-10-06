@@ -3,12 +3,12 @@ node_modules/
 dist/
 .falcon_/
 .miniapp/
-generated/
+/generated/
 *.amr
 *.log
 
-# 本机临时/探测产物
-probe/
+# 本机临时/探测产物（根目录锚定；注意 src/pages/probe 是源码目录，不能被忽略）
+/probe/
 *.snapshot
 
 # 编辑器

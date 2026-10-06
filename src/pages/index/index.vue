@@ -49,18 +49,20 @@ export default {
       return this.merchants.filter((m) => m.categoryId === this.selectedCategoryId);
     },
   },
-  async onShow() {
-    await this.reload();
-    this.startBannerTimer();
-  },
-  onHide() {
-    this.stopBannerTimer();
-  },
-  onUnload() {
-    this.stopBannerTimer();
-    this.loadGeneration += 1;
-  },
   methods: {
+    // 注意：页面生命周期钩子必须放在 methods 里，
+    // BasePage（设备默认页基类）通过 this.$root.onShow() 转发调用。
+    async onShow() {
+      await this.reload();
+      this.startBannerTimer();
+    },
+    onHide() {
+      this.stopBannerTimer();
+    },
+    onUnload() {
+      this.stopBannerTimer();
+      this.loadGeneration += 1;
+    },
     async reload() {
       const generation = ++this.loadGeneration;
       try {

@@ -11,7 +11,7 @@
     "generate": "miniapp generate",
     "typecheck": "miniapp generate && tsc --noEmit",
     "build": "miniapp generate && aiot-cli build --mock",
-    "test": "miniapp generate && tsx --test tests/merchants.test.ts"
+    "test": "miniapp generate && tsx --test tests/merchants.test.ts tests/app-entry.test.ts"
   },
   "dependencies": {
     "@penosext/miniapp-ai": "^0.1.0",

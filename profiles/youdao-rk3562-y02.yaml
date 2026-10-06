@@ -8,7 +8,7 @@ firmware: "otaVersion 4.9.7, buildroot -g9a6d10c0cf (rk3562_y02_defconfig, built
 runtime:
   falcon: "miniapp 包系统 4.9.7 (local_packages.json version)"
   quickjs: "20200705 (bigNum: false, 见系统桌面包 manifest)"
-  api: "待验证: App.onLaunch / setViewPort / jsapi.* 能力面需在 spike 中实测"
+  api: "已验证(2026-10-06): App 必须 class extends $falcon.App；onLaunch 调 super + useDefaultBasePageClass；页面 hooks(onShow/onHide/onUnload) 必须放 Vue methods；vh/vw 直映射物理像素"
   screen_cfg: "/etc/miniapp/resources/cfg.json"
 
 abi:
@@ -24,8 +24,8 @@ screen:
   physical: { width: 936, height: 280, direction: 270, xoffset: 0, yoffset: 0 }
   touch: { direction: 270, xoffset: 0, yoffset: 0, device: "/dev/input/by-path/sitronix_ts_spi" }
   framebuffer: "/dev/fb0 (dbuffer: true)"
-  logical: "未验证 — 需 vh/vw 探针页 + setViewPort 实测定 design width"
-  notes: "cfg.json direction/tp_direction = 270; 物理横向长条屏 936x280; 逻辑坐标系待验证"
+  logical: "已验证: 1vh=0.01×280px, 1vw=0.01×936px 直映射物理像素; 未设置 setViewPort"
+  notes: "cfg.json direction/tp_direction = 270; 物理横向长条屏 936x280; vh/vw 探针页四角/中心/scroller 真机截图验证通过"
 
 input_method:
   version: "未确认 (输入法包 8001666679481944 存在于 /userdisk/secondary/miniapp)"
@@ -38,10 +38,11 @@ media:
   kms_driver: "modetest 存在, rockchip DRM 未验证"
 
 package:
-  appid: "未分配 — 新 app 需选定 appid (系统包为 8080 开头 16 位数字)"
-  version: ""
+  appid: "测试用占位 0000000000000000 (系统包为 8080 开头 16 位数字; 正式 appid 待定)"
+  version: "0.1.0 (构建产物: 0000000000000000.0_1_0.amr)"
   start_page: "index"
-  cli: "miniapp_cli install {amrPath} / uninstall {appid} / start {appId} --{page} / capture {path}"
+  cli: "miniapp_cli install {amrPath} / uninstall {appid} / start {appId} {page} (page 为位置参数, 传 '--probe' 会被当作字面文件名) / capture {path}"
+  installed_path: "/userdisk/secondary/miniapp/data/mini_app/pkg/{appid}/(a|b)/ (a/b 槽位轮换)"
 
 validation:
   tested_at: "2026-10-06"
@@ -54,8 +55,15 @@ validation:
     - "/etc/miniapp/resources/cfg.json → screen 936x280 direction 270"
     - "local_packages.json → version 4.9.7, 系统包 词典笔桌面/查词翻译"
     - "设备 libstdc++ GLIBCXX_3.4.29 上限"
+    - "App 入口契约: 必须导出 class extends $falcon.App（普通对象导致 launchApp 'TypeError: not a constructor' + 黑屏，真机复现）"
+    - "页面生命周期契约: onShow/onHide/onUnload 必须放 Vue 组件 methods；BasePage 经 this.$root 转发调用（顶层选项不生效）"
+    - "vh/vw 真机验证: 探针页四角/中心/scroller 渲染正确，直映射物理像素，未设 setViewPort (profiles/evidence/2026-10-06-probe-vhvw.png)"
+    - "真机渲染: 首页 8 分类 + 商家卡片 + banner 轮播 (2026-10-06-index.png)；分类页 (2026-10-06-category.png)"
+    - "mock 数据链路真机可用: 动态 import JSON chunk 正常，merchantService 归一化正常"
+    - "资源回收: 3 轮进出后 QuickJS 对象数恒定 106926，字节每轮 +~100B（非泄漏量级）"
+    - "构建链: pnpm test 9/9 / tsc 0 err / aiot-cli build --mock 0 ERROR（Windows + pnpm patch 生效）"
   pending:
-    - "逻辑分辨率与 setViewPort 设计宽度"
-    - "vh/vw 在当前构建器/运行时的支持"
+    - "触控映射与点击交互（未注入测试）"
     - "输入法两条路径 (global.startTextEdit / textarea softInputEnable)"
-    - "native .so 动态加载验证"
+    - "native .so 动态加载验证 (mtdevice)"
+    - "模拟器 (aiot-cli simulator) 行为记录"

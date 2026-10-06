@@ -33,13 +33,14 @@ export default {
       return this.merchants.filter((m) => m.categoryId === this.selectedCategoryId);
     },
   },
-  async onShow() {
-    await this.reload();
-  },
-  onUnload() {
-    this.loadGeneration += 1;
-  },
   methods: {
+    // 注意：页面生命周期钩子必须放在 methods 里（BasePage 通过 $root 转发）。
+    async onShow() {
+      await this.reload();
+    },
+    onUnload() {
+      this.loadGeneration += 1;
+    },
     async reload() {
       const generation = ++this.loadGeneration;
       try {
