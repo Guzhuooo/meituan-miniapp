@@ -1,0 +1,61 @@
+# 设备 profile — 唯一事实来源
+# 探测日期: 2026-10-06 (只读 adb 探测, 证据见 profiles/evidence/)
+
+profile_id: youdao-rk3562-y02-497
+model: "Rockchip RK3562 Y02 LP4 V10 Board (Youdao Dictionary Pen, hostname YoudaoDictionaryPen-093, adb 伪装 Nexus 4/occam, serial MEA2400009000093)"
+firmware: "otaVersion 4.9.7, buildroot -g9a6d10c0cf (rk3562_y02_defconfig, built 2025-11-13)"
+
+runtime:
+  falcon: "miniapp 包系统 4.9.7 (local_packages.json version)"
+  quickjs: "20200705 (bigNum: false, 见系统桌面包 manifest)"
+  api: "待验证: App.onLaunch / setViewPort / jsapi.* 能力面需在 spike 中实测"
+  screen_cfg: "/etc/miniapp/resources/cfg.json"
+
+abi:
+  machine: "AArch64 (ELF64 LSB pie, 实测 /bin/miniapp_cli)"
+  bits: 64
+  libc: "GNU glibc 2.36 (Buildroot stable)"
+  loader: "/lib/ld-linux-aarch64.so.1"
+  libstdcxx: "libstdc++.so.6.0.29, GLIBCXX 最高 3.4.29 → 交叉编译 C++ 不得要求 > 3.4.29"
+  toolchain: "内核/固件用 aarch64-none-linux-gnu-gcc (Arm GNU Toolchain A-profile 10.3-2021.07); CI 用同系或更新 aarch64 linux-gnu 工具链, 链接目标 glibc 2.36"
+  kernel: "5.10.160 SMP, SoC RK3562 (Cortex-A53 x4)"
+
+screen:
+  physical: { width: 936, height: 280, direction: 270, xoffset: 0, yoffset: 0 }
+  touch: { direction: 270, xoffset: 0, yoffset: 0, device: "/dev/input/by-path/sitronix_ts_spi" }
+  framebuffer: "/dev/fb0 (dbuffer: true)"
+  logical: "未验证 — 需 vh/vw 探针页 + setViewPort 实测定 design width"
+  notes: "cfg.json direction/tp_direction = 270; 物理横向长条屏 936x280; 逻辑坐标系待验证"
+
+input_method:
+  version: "未确认 (输入法包 8001666679481944 存在于 /userdisk/secondary/miniapp)"
+  global_text_edit: untested
+  textarea_soft_input: untested
+
+media:
+  gstreamer: "gst-launch-1.0 存在 (版本待查)"
+  decoder: "未验证"
+  kms_driver: "modetest 存在, rockchip DRM 未验证"
+
+package:
+  appid: "未分配 — 新 app 需选定 appid (系统包为 8080 开头 16 位数字)"
+  version: ""
+  start_page: "index"
+  cli: "miniapp_cli install {amrPath} / uninstall {appid} / start {appId} --{page} / capture {path}"
+
+validation:
+  tested_at: "2026-10-06"
+  evidence:
+    - "adb devices -l → MEA2400009000093 device (product occam/Nexus_4 为伪装)"
+    - "/etc/os-release → Buildroot 2021.11, RK3562-SDK rockchip_rk3562_y02_defconfig"
+    - "/proc/version → aarch64-none-linux-gnu-gcc 10.3-2021.07"
+    - "pull /bin/miniapp_cli → ELF64 aarch64, interp /lib/ld-linux-aarch64.so.1, NEEDED libstdc++.so.6"
+    - "strings /lib/libc.so.6 → GNU C Library (Buildroot) 2.36"
+    - "/etc/miniapp/resources/cfg.json → screen 936x280 direction 270"
+    - "local_packages.json → version 4.9.7, 系统包 词典笔桌面/查词翻译"
+    - "设备 libstdc++ GLIBCXX_3.4.29 上限"
+  pending:
+    - "逻辑分辨率与 setViewPort 设计宽度"
+    - "vh/vw 在当前构建器/运行时的支持"
+    - "输入法两条路径 (global.startTextEdit / textarea softInputEnable)"
+    - "native .so 动态加载验证"

@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "runtimeApi": 1,
+  "sdk": null,
+  "packages": {
+    "@penosext/miniapp-runtime": {
+      "version": "0.1.0",
+      "source": "registry",
+      "directory": "node_modules/@penosext/miniapp-runtime",
+      "sha256": "951b46a99d4a264d1c27515186497632f55737376efac2b5e4239686e2d1b417",
+      "module": "runtime",
+      "native": {
+        "language": "cpp",
+        "cmake": "native/cpp/CMakeLists.txt"
+      },
+      "permissions": [],
+      "dependencies": []
+    },
+    "@penosext/miniapp-http": {
+      "version": "0.1.0",
+      "source": "registry",
+      "directory": "node_modules/@penosext/miniapp-http",
+      "sha256": "b433b883a8d688c60b28caf01e4b8c9a53d3dae620d15f89ee3fe3b1e5f5bc32",
+      "module": "http",
+      "native": {
+        "language": "cpp",
+        "exports": [
+          "Http"
+        ],
+        "cmake": "native/cpp/CMakeLists.txt"
+      },
+      "permissions": [
+        "network"
+      ],
+      "dependencies": [
+        "@penosext/miniapp-runtime"
+      ]
+    },
+    "@penosext/miniapp-sqlite": {
+      "version": "0.1.0",
+      "source": "registry",
+      "directory": "node_modules/@penosext/miniapp-sqlite",
+      "sha256": "bedf9691389c23b3dd1799c4c0136fa724e2573f330a17975de80ebe8256187e",
+      "module": "sqlite",
+      "native": {
+        "language": "cpp",
+        "exports": [
+          "Sqlite"
+        ],
+        "cmake": "native/cpp/CMakeLists.txt",
+        "options": {
+          "MINIAPP_SQLITE_VERSION": {
+            "type": "integer",
+            "default": 3450300,
+            "autoDetect": "sqlite.version",
+            "description": "SQLite amalgamation version encoded as SQLite's numeric release id"
+          }
+        }
+      },
+      "permissions": [
+        "filesystem"
+      ],
+      "dependencies": [
+        "@penosext/miniapp-runtime"
+      ]
+    },
+    "@penosext/miniapp-ai": {
+      "version": "0.1.1",
+      "source": "registry",
+      "directory": "node_modules/@penosext/miniapp-ai",
+      "sha256": "0c3a157d9f257273fd6f85d6d57056fd8f5f6aa2772e477e5a45d44a812dd3dd",
+      "module": "ai",
+      "native": {
+        "language": "cpp",
+        "exports": [
+          "AI"
+        ],
+        "cmake": "native/cpp/CMakeLists.txt"
+      },
+      "permissions": [
+        "network",
+        "filesystem"
+      ],
+      "dependencies": [
+        "@penosext/miniapp-runtime",
+        "@penosext/miniapp-http",
+        "@penosext/miniapp-sqlite"
+      ]
+    },
+    "@penosext/miniapp-input": {
+      "version": "0.1.0",
+      "source": "registry",
+      "directory": "node_modules/@penosext/miniapp-input",
+      "sha256": "642276cbe2c1a4961d29367e27e59f100c1446840fa7bda8b2c90514c1cb1729",
+      "module": "input",
+      "native": {
+        "language": "cpp",
+        "exports": [
+          "IME",
+          "ScanInput"
+        ],
+        "cmake": "native/cpp/CMakeLists.txt"
+      },
+      "permissions": [
+        "device.input"
+      ],
+      "dependencies": [
+        "@penosext/miniapp-runtime",
+        "@penosext/miniapp-sqlite"
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "type": "application",
+  "module": "meituan-miniapp",
+  "appid": "0000000000000000",
+  "runtimeApi": 1,
+  "contract": "@penosext/miniapp-http",
+  "nativePackages": [
+    "@penosext/miniapp-runtime",
+    "@penosext/miniapp-http",
+    "@penosext/miniapp-sqlite",
+    "@penosext/miniapp-input"
+  ]
+}

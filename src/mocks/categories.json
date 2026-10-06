@@ -1,0 +1,10 @@
+[
+  { "id": "cat-food", "name": "美食", "icon": "" },
+  { "id": "cat-drink", "name": "奶茶咖啡", "icon": "" },
+  { "id": "cat-super", "name": "超市便利", "icon": "" },
+  { "id": "cat-fruit", "name": "果蔬生鲜", "icon": "" },
+  { "id": "cat-medicine", "name": "送药上门", "icon": "" },
+  { "id": "cat-flower", "name": "鲜花绿植", "icon": "" },
+  { "id": "cat-dessert", "name": "甜点蛋糕", "icon": "" },
+  { "id": "cat-night", "name": "夜宵", "icon": "" }
+]

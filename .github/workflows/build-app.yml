@@ -1,0 +1,63 @@
+name: build-app
+
+# JS 测试 + 类型检查 + AMR 打包；native .so 复用 build-native 的 artifact。
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  native:
+    uses: ./.github/workflows/build-native.yml
+
+  app:
+    needs: native
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable pnpm
+
+      - name: Install dependencies
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        run: pnpm test
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Fetch native .so
+        uses: actions/download-artifact@v4
+        with:
+          name: libjsapi_mtdevice-aarch64
+          path: libs
+
+      - name: Build AMR
+        run: pnpm build
+
+      - name: Package check + checksum
+        run: |
+          AMR=$(find . -name '*.amr' | head -1)
+          test -n "$AMR" || { echo "no AMR produced"; exit 1; }
+          echo "AMR=$AMR" >> "$GITHUB_ENV"
+          unzip -l "$AMR" | tee unpack.log
+          grep -q 'libs/libjsapi_mtdevice.so' unpack.log || { echo "native .so missing from AMR"; exit 1; }
+          sha256sum "$AMR" | tee amr.sha256
+
+      - name: Upload AMR
+        uses: actions/upload-artifact@v4
+        with:
+          name: meituan-amr
+          path: |
+            ${{ env.AMR }}
+            amr.sha256
+          if-no-files-found: error

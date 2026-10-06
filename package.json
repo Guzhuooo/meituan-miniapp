@@ -1,0 +1,41 @@
+{
+  "name": "meituan-miniapp",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "appid": "0000000000000000",
+  "appName": "美团",
+  "icon": "app_icon.png",
+  "scripts": {
+    "generate": "miniapp generate",
+    "typecheck": "miniapp generate && tsc --noEmit",
+    "build": "miniapp generate && aiot-cli build --mock",
+    "test": "miniapp generate && tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@penosext/miniapp-aiot-vue-cli": "^1.0.35",
+    "@penosext/miniapp-http": "^0.1.0",
+    "@penosext/miniapp-input": "^0.1.0",
+    "@penosext/miniapp-runtime": "^0.1.0",
+    "@penosext/miniapp-sqlite": "^0.1.0",
+    "@penosext/miniapp-types": "^0.1.0",
+    "falcon-ui": "^2.0.2",
+    "vue": "^3.5.29"
+  },
+  "devDependencies": {
+    "@penosext/miniapp-cli": "^0.1.2",
+    "@types/node": "^25.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "files": [
+    "app_icon.png",
+    "api-mock",
+    "images",
+    "miniapp.app.json",
+    "miniapp.lock",
+    "src",
+    "tsconfig.json"
+  ]
+}

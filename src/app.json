@@ -1,0 +1,8 @@
+{
+  "pages": {
+    "index": "pages/index/index.vue",
+    "category": "pages/category/category.vue",
+    "probe": "pages/probe/probe.vue"
+  },
+  "options": { "bundleFramework": true, "external": ["langningchen"] }
+}

@@ -1,0 +1,14 @@
+[
+  { "id": "m001", "name": "老张手擀面", "categoryId": "cat-food", "rating": 4.7, "monthlySales": 3210, "deliveryMinutes": 28, "minOrder": 15, "avgPrice": 22, "tags": ["面食", "蹭饭凉菜", "免配送费"], "image": "", "closed": false },
+  { "id": "m002", "name": "川香居家常菜", "categoryId": "cat-food", "rating": 4.5, "monthlySales": 1875, "deliveryMinutes": 35, "minOrder": 20, "avgPrice": 38, "tags": ["川菜", "下饭菜"], "image": "", "closed": false },
+  { "id": "m003", "name": "港式烧腊快餐", "categoryId": "cat-food", "rating": 4.3, "monthlySales": 990, "deliveryMinutes": 40, "minOrder": 18, "avgPrice": 30, "tags": ["烧腊", "快餐"], "image": "", "closed": true },
+  { "id": "m004", "name": "轻食沙拉工坊", "categoryId": "cat-food", "rating": 4.8, "monthlySales": 654, "deliveryMinutes": 30, "minOrder": 25, "avgPrice": 42, "tags": ["轻食", "减脂", "低卡"], "image": "", "closed": false },
+  { "id": "m005", "name": "茶语鲜奶茶", "categoryId": "cat-drink", "rating": 4.6, "monthlySales": 5400, "deliveryMinutes": 22, "minOrder": 10, "avgPrice": 16, "tags": ["奶茶", "水果茶", "新店"], "image": "", "closed": false },
+  { "id": "m006", "name": "深烘咖啡角", "categoryId": "cat-drink", "rating": 4.9, "monthlySales": 2100, "deliveryMinutes": 25, "minOrder": 12, "avgPrice": 24, "tags": ["咖啡", "美式", "拿铁"], "image": "", "closed": false },
+  { "id": "m007", "name": "惠民便利超市", "categoryId": "cat-super", "rating": 4.4, "monthlySales": 7800, "deliveryMinutes": 18, "minOrder": 0, "avgPrice": 28, "tags": ["24h", "日用", "零食饮料"], "image": "", "closed": false },
+  { "id": "m008", "name": "鲜丰果园", "categoryId": "cat-fruit", "rating": 4.6, "monthlySales": 3300, "deliveryMinutes": 32, "minOrder": 20, "avgPrice": 35, "tags": ["时令水果", "整箱购"], "image": "", "closed": false },
+  { "id": "m009", "name": "康宁大药房", "categoryId": "cat-medicine", "rating": 4.8, "monthlySales": 860, "deliveryMinutes": 26, "minOrder": 0, "avgPrice": 45, "tags": ["24h", "夜间送药"], "image": "", "closed": false },
+  { "id": "m010", "name": "花间集鲜花店", "categoryId": "cat-flower", "rating": 4.7, "monthlySales": 420, "deliveryMinutes": 45, "minOrder": 39, "avgPrice": 68, "tags": ["鲜花", "绿植", "花束"], "image": "", "closed": false },
+  { "id": "m011", "name": "甜心烘焙屋", "categoryId": "cat-dessert", "rating": 4.5, "monthlySales": 1500, "deliveryMinutes": 38, "minOrder": 22, "avgPrice": 33, "tags": ["蛋糕", "面包", "定制"], "image": "", "closed": false },
+  { "id": "m012", "name": "深夜炸鸡铺", "categoryId": "cat-night", "rating": 4.2, "monthlySales": 2680, "deliveryMinutes": 42, "minOrder": 25, "avgPrice": 36, "tags": ["炸鸡", "夜宵", "啤酒伴侣"], "image": "", "closed": false }
+]

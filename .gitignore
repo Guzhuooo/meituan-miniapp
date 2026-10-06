@@ -1,0 +1,19 @@
+# 依赖与构建产物
+node_modules/
+dist/
+.falcon_/
+*.amr
+*.log
+
+# 本机临时/探测产物
+probe/
+*.snapshot
+
+# 编辑器
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# ZCode 会话数据
+.zcode/
